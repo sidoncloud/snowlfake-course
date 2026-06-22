@@ -24,21 +24,35 @@ ALTER WAREHOUSE COURSE_WH SET WAREHOUSE_SIZE = 'SMALL';
 SHOW WAREHOUSES LIKE 'COURSE_WH';
 ALTER WAREHOUSE COURSE_WH SET WAREHOUSE_SIZE = 'XSMALL';
 
--- 2b. Warehouse TYPES. The default is STANDARD (what COURSE_WH is). A
---     SNOWPARK-OPTIMIZED warehouse has far more memory per node for heavy
---     Snowpark / Python / ML work, has a minimum size of MEDIUM, and costs more.
---     We create one (suspended, so it costs nothing) just to see the type column.
-CREATE WAREHOUSE IF NOT EXISTS SNOWPARK_WH
-  WAREHOUSE_SIZE = 'MEDIUM'
-  WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED'
-  INITIALLY_SUSPENDED = TRUE
-  COMMENT = 'Demo of the Snowpark-optimized warehouse type';
+-- 2b. Warehouse TYPES. Snowsight's "Type" dropdown shows four choices. They are
+--     all just different compute engines. COURSE_WH is the everyday one: a
+--     STANDARD warehouse. Standard comes in two hardware generations, Gen2 (the
+--     new, faster default) and Gen1 (the original). Look at the type and
+--     generation columns for COURSE_WH.
+SHOW WAREHOUSES LIKE 'COURSE_WH';        -- type = STANDARD, generation = 2
 
--- Compare the two: look at the "type" column (STANDARD vs SNOWPARK-OPTIMIZED).
-SHOW WAREHOUSES LIKE '%WH';
+-- You can pin a generation with the GENERATION property.
+CREATE OR REPLACE WAREHOUSE GEN1_DEMO
+  WAREHOUSE_SIZE = 'XSMALL' GENERATION = '1' INITIALLY_SUSPENDED = TRUE;
 
--- We do not need it for the rest of the course, so drop it to avoid any cost.
-DROP WAREHOUSE IF EXISTS SNOWPARK_WH;
+-- A SNOWPARK-OPTIMIZED warehouse has 16x the memory per node for heavy Snowpark,
+-- Python, and machine learning work. Its minimum size is MEDIUM, and it costs more.
+CREATE OR REPLACE WAREHOUSE SNOWPARK_DEMO
+  WAREHOUSE_SIZE = 'MEDIUM' WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED' INITIALLY_SUSPENDED = TRUE;
+
+-- An INTERACTIVE warehouse is built for sub-second, high-concurrency real-time
+-- analytics, like live dashboards and data-backed APIs.
+CREATE OR REPLACE WAREHOUSE INTERACTIVE_DEMO
+  WAREHOUSE_SIZE = 'XSMALL' WAREHOUSE_TYPE = 'INTERACTIVE' INITIALLY_SUSPENDED = TRUE;
+
+-- Compare them. Read the type column (STANDARD / SNOWPARK-OPTIMIZED / INTERACTIVE)
+-- and the generation column (2 for COURSE_WH, 1 for GEN1_DEMO).
+SHOW WAREHOUSES LIKE '%DEMO';
+
+-- Drop the demos. While suspended they cost nothing, but keep the account tidy.
+DROP WAREHOUSE IF EXISTS GEN1_DEMO;
+DROP WAREHOUSE IF EXISTS SNOWPARK_DEMO;
+DROP WAREHOUSE IF EXISTS INTERACTIVE_DEMO;
 
 -- 3. Create a resource monitor: a hard guardrail on credit spend.
 --    Notify at 75%, suspend after running queries finish at 90%,
