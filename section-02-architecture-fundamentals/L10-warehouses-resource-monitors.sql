@@ -5,7 +5,6 @@
 -- OPTIONAL. The lecture does this lab in the Snowsight UI (point and click).
 -- This worksheet is the SQL version of the exact same steps, in case you'd
 -- rather do it in code. Run top to bottom in a Snowsight worksheet, role ACCOUNTADMIN.
--- Live-tested against a real account.
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
@@ -105,7 +104,7 @@ FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY())
 ORDER BY START_TIME DESC
 LIMIT 10;
 
--- Cleanup (run after recording):
+-- Cleanup (optional, run this when you are done to remove what the lab created):
 -- ALTER WAREHOUSE COURSE_WH UNSET RESOURCE_MONITOR;
 -- DROP RESOURCE MONITOR IF EXISTS COURSE_RM;
 -- DROP WAREHOUSE IF EXISTS COURSE_WH;

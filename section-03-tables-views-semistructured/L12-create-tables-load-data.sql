@@ -3,7 +3,6 @@
 -- Section 3: Tables, Views & Semi-Structured Data
 -- Run top to bottom in a Snowsight worksheet.
 -- Builds the SNOWFLAKE_LABS.RETAIL schema used by L14 (views) and L18 (time travel).
--- STATUS: staged, NOT yet live-tested (pending Snowflake connection).
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;

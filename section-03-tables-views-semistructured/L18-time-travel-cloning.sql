@@ -2,7 +2,6 @@
 -- L18 LAB - Recover data with Time Travel; clone a database instantly
 -- Section 3: Tables, Views & Semi-Structured Data
 -- PREREQ: run L12 first (uses SNOWFLAKE_LABS.RETAIL.orders as the source).
--- STATUS: staged, NOT yet live-tested (pending Snowflake connection).
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
@@ -56,7 +55,7 @@ SELECT
 CREATE SCHEMA SNOWFLAKE_LABS.RETAIL_CLONE CLONE SNOWFLAKE_LABS.RETAIL;
 SHOW TABLES IN SCHEMA SNOWFLAKE_LABS.RETAIL_CLONE;
 
--- Cleanup (run after recording):
+-- Cleanup (optional, run this when you are done to remove what the lab created):
 -- DROP TABLE  IF EXISTS tt_demo;
 -- DROP TABLE  IF EXISTS tt_demo_clone;
 -- DROP SCHEMA IF EXISTS SNOWFLAKE_LABS.RETAIL_CLONE;

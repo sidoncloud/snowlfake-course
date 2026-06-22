@@ -2,7 +2,6 @@
 -- L16 LAB - Query JSON with dot notation and FLATTEN
 -- Section 3: Tables, Views & Semi-Structured Data
 -- Self-contained (no S3). Uses SNOWFLAKE_LABS.RETAIL.
--- STATUS: staged, NOT yet live-tested (pending Snowflake connection).
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
@@ -81,5 +80,5 @@ FROM raw_order_events,
 GROUP BY order_id
 ORDER BY order_id;
 
--- Cleanup (run after recording):
+-- Cleanup (optional, run this when you are done to remove what the lab created):
 -- DROP TABLE IF EXISTS raw_order_events;

@@ -3,7 +3,6 @@
 -- Section 3: Tables, Views & Semi-Structured Data
 -- PREREQ: run L12 first (this uses SNOWFLAKE_LABS.RETAIL.customers / orders).
 -- Materialized views require Enterprise edition (Snowflake trials are Enterprise).
--- STATUS: staged, NOT yet live-tested (pending Snowflake connection).
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
@@ -52,7 +51,7 @@ SHOW VIEWS LIKE 'v_%' IN SCHEMA SNOWFLAKE_LABS.RETAIL;
 SELECT GET_DDL('view', 'v_order_summary');             -- standard: definition visible
 SELECT GET_DDL('view', 'v_customer_contact_secure');   -- secure: owner sees it; others cannot
 
--- Cleanup (run after recording):
+-- Cleanup (optional, run this when you are done to remove what the lab created):
 -- DROP VIEW IF EXISTS v_order_summary;
 -- DROP MATERIALIZED VIEW IF EXISTS mv_revenue_by_status;
 -- DROP VIEW IF EXISTS v_customer_contact_secure;
