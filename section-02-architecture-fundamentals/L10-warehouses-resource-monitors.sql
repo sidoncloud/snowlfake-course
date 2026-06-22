@@ -1,8 +1,11 @@
 -- =============================================================================
 -- L10 LAB - Create warehouses, set a resource monitor, read consumption
 -- Section 2: Architecture & Fundamentals
--- Run top to bottom in a Snowsight worksheet. Role ACCOUNTADMIN.
--- STATUS: staged, NOT yet live-tested (pending Snowflake connection).
+--
+-- OPTIONAL. The lecture does this lab in the Snowsight UI (point and click).
+-- This worksheet is the SQL version of the exact same steps, in case you'd
+-- rather do it in code. Run top to bottom in a Snowsight worksheet, role ACCOUNTADMIN.
+-- Live-tested against a real account.
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
