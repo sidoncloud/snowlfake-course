@@ -45,9 +45,11 @@ FROM customers;
 
 SELECT * FROM v_customer_contact_secure ORDER BY customer_id;
 
--- 4. Prove the difference. As the owner you can still read the DDL, but the
---    IS_SECURE flag marks it, and a non-owner role cannot see the definition.
-SHOW VIEWS LIKE 'v_%' IN SCHEMA SNOWFLAKE_LABS.RETAIL;
+-- 4. Prove the difference. SHOW VIEWS lists all of them (it includes
+--    materialized views too): read the IS_MATERIALIZED column (true only for
+--    mv_revenue_by_status) and the IS_SECURE column (true only for the secure
+--    view). Do NOT filter with LIKE 'v_%', that would hide the mv_ matview.
+SHOW VIEWS IN SCHEMA SNOWFLAKE_LABS.RETAIL;
 SELECT GET_DDL('view', 'v_order_summary');             -- standard: definition visible
 SELECT GET_DDL('view', 'v_customer_contact_secure');   -- secure: owner sees it; others cannot
 
