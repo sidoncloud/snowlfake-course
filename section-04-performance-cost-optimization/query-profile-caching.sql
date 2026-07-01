@@ -1,41 +1,37 @@
 -- =============================================================================
--- L21 LAB - Query Profile, result cache vs warehouse cache
+-- LAB - Query Profile, result cache and warehouse cache
 -- Section 4: Performance & Cost Optimization
--- Run top to bottom in a Snowsight worksheet. Role ACCOUNTADMIN.
--- The Query Profile itself is viewed in the Snowsight UI (open a query from the
--- history, then the Query Profile tab). The SQL below gives you queries to look at.
+-- Run in a Snowsight worksheet as ACCOUNTADMIN. The Query Profile is viewed in
+-- the UI: open a query from Monitoring, then the Query Profile tab.
 -- =============================================================================
 
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE COURSE_WH;
 
--- 1. Run a query, then open its Query Profile (click the query in the history,
---    then the Query Profile tab). Note "Partitions scanned" versus the total,
---    and the operator tree showing where time went.
+-- 1. Run this, then open its Query Profile. Read the operator tree (TableScan,
+--    Aggregate, Result), and the Statistics panel: Bytes scanned, Partitions
+--    scanned vs total (equal here, no WHERE filter to prune), and Percentage
+--    scanned from cache (0 on this first cold run).
 SELECT o_orderpriority, COUNT(*) AS orders, SUM(o_totalprice) AS revenue
 FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS
 GROUP BY o_orderpriority;
 
--- 2. RESULT CACHE. Run the exact same query again. It returns almost instantly,
---    because Snowflake reuses the stored result. The profile shows a single
---    QUERY RESULT REUSE node, and it scans zero bytes and uses no warehouse.
+-- 2. RESULT CACHE. Run the EXACT same query again, a few times. It may reuse on
+--    the second run or need a third. When it does, the profile collapses to a
+--    single QUERY RESULT REUSE node and scans zero bytes.
 SELECT o_orderpriority, COUNT(*) AS orders, SUM(o_totalprice) AS revenue
 FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS
 GROUP BY o_orderpriority;
 
--- 3. Turn the result cache off so you can feel the difference, then run it again.
---    Now it actually executes on the warehouse. Turn the cache back on after.
+-- 3. Turn the result cache off so every run really executes.
 ALTER SESSION SET USE_CACHED_RESULT = FALSE;
+
+-- 4. WAREHOUSE CACHE. Run the query again a few times, with the result cache off.
+--    It executes each time, but watch Percentage scanned from cache climb from 0
+--    toward 100 percent, as the warehouse keeps the table's data on local disk.
 SELECT o_orderpriority, COUNT(*) AS orders, SUM(o_totalprice) AS revenue
 FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS
 GROUP BY o_orderpriority;
 
--- 4. WAREHOUSE (local disk) CACHE. With the result cache still off, run a query
---    and then a different follow-up over the same table. The warehouse kept the
---    data it just read on local disk, so the second query reads more from cache
---    and less from storage. Check "Percentage scanned from cache" in each profile.
-SELECT COUNT(*) FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS WHERE o_totalprice > 100000;
-SELECT COUNT(*) FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS WHERE o_totalprice > 200000;
-
--- Put the result cache back on for normal work.
+-- 5. Put the result cache back on for normal work.
 ALTER SESSION SET USE_CACHED_RESULT = TRUE;
