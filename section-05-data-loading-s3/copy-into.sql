@@ -1,7 +1,9 @@
 -- =============================================================================
 -- LAB - Stages, file formats, and COPY INTO (CSV / JSON / Parquet)
 -- Section 5: Data Loading & Ingestion from AWS S3
--- PREREQ: run the storage-integration lab first (it builds s3_int and s3_stage).
+-- PREREQ 1: run the storage-integration lab first (it builds s3_int and s3_stage).
+-- PREREQ 2: upload the sample files from the datasets/ folder to your bucket:
+--   orders.csv -> raw/csv/ , events.json -> raw/json/ , orders.parquet -> raw/parquet/
 -- Run in a Snowsight worksheet as ACCOUNTADMIN.
 -- =============================================================================
 

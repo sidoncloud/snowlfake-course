@@ -37,8 +37,9 @@ SHOW PIPES LIKE 'orders_pipe_pipe';
 --    SQS queue, Enter SQS queue ARN, and paste the notification_channel value.
 --    Save it. Now every new file under stream/ pings the pipe.
 
--- 5. Upload a CSV under the stream/ prefix, from the console or the AWS CLI.
---    Within about a minute Snowpipe loads it on its own. Watch the count grow.
+-- 5. Upload stream_orders.csv (from the datasets/ folder) under the stream/ prefix,
+--    from the console or the AWS CLI. Within about a minute Snowpipe loads it on its
+--    own. Watch the count grow.
 SELECT COUNT(*) FROM orders_pipe;
 
 -- 6. Check the pipe is healthy. executionState should read RUNNING.
