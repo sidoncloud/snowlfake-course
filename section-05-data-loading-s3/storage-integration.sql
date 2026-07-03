@@ -9,10 +9,12 @@
 -- ---- In the AWS console, first ----
 -- 1. Create an S3 bucket in us-east-1, for example snowflake-course-labs-<account>.
 --    Upload a sample file under a raw/ prefix so there is something to read.
--- 2. Create an IAM policy that allows s3:GetObject, s3:GetObjectVersion on the
---    bucket objects, and s3:ListBucket, s3:GetBucketLocation on the bucket.
+-- 2. Create an IAM policy: paste s3-access-policy.json (in this folder) into the
+--    JSON editor and replace <your-bucket>. It grants read AND write on the
+--    objects (GetObject/PutObject/etc, write is needed for the unload lab) plus
+--    ListBucket and GetBucketLocation on the bucket.
 -- 3. Create an IAM role that trusts your own account for now, and attach that
---    policy. Copy the role ARN. We fix the trust in step 4 below.
+--    policy. Copy the role ARN. We fix the trust in step 3 below.
 
 USE ROLE ACCOUNTADMIN;
 
@@ -32,10 +34,10 @@ DESC INTEGRATION s3_int;
 --    Note STORAGE_AWS_EXTERNAL_ID   (a unique external id)
 
 -- ---- Back in the AWS console (the step everyone forgets) ----
--- 3. Edit your IAM role's trust policy. Set the Principal to the
---    STORAGE_AWS_IAM_USER_ARN, and add a Condition that requires
---    sts:ExternalId to equal the STORAGE_AWS_EXTERNAL_ID. Save it.
---    Without this, every later command fails with Access Denied.
+-- 3. Edit your IAM role's trust policy: paste s3-trust-policy.json (in this
+--    folder) and fill in the two values, the STORAGE_AWS_IAM_USER_ARN as the
+--    Principal and the STORAGE_AWS_EXTERNAL_ID in the sts:ExternalId condition.
+--    Save it. Without this, every later command fails with Access Denied.
 
 -- ---- Back in Snowsight ----
 
