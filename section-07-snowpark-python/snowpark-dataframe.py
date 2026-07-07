@@ -8,22 +8,26 @@
 #
 #   pip install snowflake-snowpark-python
 #
-# ONE-TIME SETUP: your credentials live in a connections.toml file, so no
-# password ever appears in this code. Create the file once at:
-#   ~/.snowflake/connections.toml
-# with this structure (fill in your own values, these are placeholders):
+# ONE-TIME SETUP: let the Snowflake CLI create your connection so you never have
+# to hand-edit a hidden config file. Install the CLI (the "snow" command):
+#   pip install snowflake-cli
 #
-#   [snowcourse]
-#   account = "<your_account_identifier>"
-#   user = "<your_username>"
-#   password = "<your_password>"
-#   role = "ACCOUNTADMIN"
-#   warehouse = "COMPUTE_WH"
+# Then run this interactive command and answer the prompts:
+#   snow connection add
+# It will ask for (use these values):
+#   connection name  -> snowcourse
+#   account          -> <your_account_identifier>
+#   user             -> <your_username>
+#   password         -> <your_password>
+#   role             -> ACCOUNTADMIN
+#   warehouse        -> COURSE_WH
 #
-# Then lock it down so only you can read it:
-#   chmod 600 ~/.snowflake/connections.toml
+# The CLI writes all of this to ~/.snowflake/connections.toml (locked down) for
+# you. Verify it with:
+#   snow connection test --connection snowcourse
 #
-# Every lab from here on just references the connection by name ("snowcourse").
+# That connections.toml is the file config("connection_name", "snowcourse")
+# reads below, so no credentials ever appear in this code.
 # =============================================================================
 
 from snowflake.snowpark import Session
