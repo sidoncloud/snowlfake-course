@@ -1,0 +1,8 @@
+[snowcourse]
+account = "<your_account_identifier>"
+user = "<your_username>"
+password = "<your_password>"
+role = "ACCOUNTADMIN"
+warehouse = "COURSE_WH"
+database = "SNOWFLAKE_SAMPLE_DATA"
+schema = "TPCH_SF1"
